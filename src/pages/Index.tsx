@@ -1,14 +1,33 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useAuth, AuthProvider } from '@/hooks/useAuth';
+import { AuthForm } from '@/components/auth/AuthForm';
+import Chat from './Chat';
 
-const Index = () => {
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
+function AppContent() {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="h-screen flex items-center justify-center bg-background">
+        <div className="flex gap-1">
+          <div className="w-3 h-3 bg-primary rounded-full animate-pulse-dot" style={{ animationDelay: '0ms' }} />
+          <div className="w-3 h-3 bg-primary rounded-full animate-pulse-dot" style={{ animationDelay: '200ms' }} />
+          <div className="w-3 h-3 bg-primary rounded-full animate-pulse-dot" style={{ animationDelay: '400ms' }} />
+        </div>
       </div>
-    </div>
-  );
-};
+    );
+  }
 
-export default Index;
+  if (!user) {
+    return <AuthForm />;
+  }
+
+  return <Chat />;
+}
+
+export default function Index() {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
+  );
+}
